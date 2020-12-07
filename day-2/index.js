@@ -13,29 +13,29 @@ function createPassword(password) {
   }
 }
 
-const passwords = passwordStrings.map((passwordString) => createPassword(passwordString));
-
-function checkValidity(min, max, char, password) {
-  let validPassword = 0;
+function checkByCharCount({ min, max, char, value }) {
   let regexChar = new RegExp(char, 'g');
-  const charCount = password.match(regexChar) ? password.match(regexChar).length : 0;
+  const charCount = (value.match(regexChar) || []).length;
 
-  if (charCount >= min && charCount <= max) {
-    return true;
-  }
-  return false;
+  return charCount >= min && charCount <= max;
 }
 
-const validPasswords = passwords.map((password) => checkValidity(password.min, password.max, password.char, password.value));
-
-function countValidPasswords(validPasswords) {
-  let validCount = 0;
-  for (let i = 0; i < validPasswords.length; i++) {
-    if (validPasswords[i] === true) {
-      validCount++;
-    }
-  }
-  return validCount;
+function checkByCharPosition({ min, max, char, value }) {
+  const minPositionValue = value[min - 1] === char;
+  const maxPositionValue = value[max - 1] === char;
+  return (minPositionValue && !maxPositionValue || !minPositionValue && maxPositionValue);
 }
 
-console.log(countValidPasswords(validPasswords));
+const validPasswordsPt1 = passwordStrings
+  .map((password) => checkByCharCount(createPassword(password)))
+  .filter((value) => value)
+  .length;
+
+const validPasswordsPt2 = passwordStrings
+  .map((password) => checkByCharPosition(createPassword(password)))
+  .filter((value) => value)
+  .length;
+
+console.log(validPasswordsPt1);
+// 515
+console.log(validPasswordsPt2);
