@@ -30,12 +30,7 @@ const calculatedCols = cols.map(col => findPosition(col, maxCol));
 const ids = calcIds(calculatedRows, calculatedCols);
 const highestId = ids[0];
 
-
 console.log('the highest seat ID is', highestId);
-
-//console.log(ids);
-
-
 
 function missingId(ids) {
 	for (let i = 0; i < ids.length - 1; i++) {
